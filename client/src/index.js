@@ -1,26 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import postsReducer from './reducers/posts';
+import { configureStore } from '@reduxjs/toolkit';
+import thunkMiddleware from 'redux-thunk';
+import  rootReducer  from "./reducers/index";
 
 import App from "./App";
 
 
 
-
-const middleware = [...getDefaultMiddleware()];
-
 const store = configureStore({
-
-  reducer: {
-
-    posts: postsReducer
-
-  },
-
-  middleware
-
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(thunkMiddleware),
 });
 
 

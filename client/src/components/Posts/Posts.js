@@ -1,15 +1,27 @@
 import React from "react";
 import { Grid, CircularProgress } from '@material-ui/core';
 import { useSelector } from "react-redux";
-
+import {  selectAllPosts, selectIsLoading, selectError } from '../../reducers/posts';
 import Post from "./Post/Post";
 
 import useStyles from './styles';
 
 const Posts = () => {
-   const posts = useSelector((state) => state.posts);
    const classes = useStyles();
-   console.log(posts);
+
+  const posts = useSelector(selectAllPosts);
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
+
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
+
   
   return (
     !posts.length ? <CircularProgress /> : (

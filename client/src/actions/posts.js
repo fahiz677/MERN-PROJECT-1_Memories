@@ -4,6 +4,7 @@ import * as api from '../api';
 export const getPosts = createAsyncThunk('posts/fetchPosts', async () => {
     try {
         const { data } = await api.fetchPosts();
+
          return data;
     } catch (error) {
         console.log(error.massage);
