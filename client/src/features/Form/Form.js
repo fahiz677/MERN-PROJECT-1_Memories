@@ -1,25 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { TextField, Button, Typography, Paper } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
 import FileBase from 'react-file-base64';
+import { useDispatch } from "react-redux";
 
+import { createPost , fetchPosts } from "../posts/postsSlice";
 
 import useStyles from './styles'
-import {  createPost} from "../../actions/posts";
+
 
 const From = () => {
-    const [postData, setPostData] = useState({ creator: '', title: '', message: '', tags: '', selectedFile: '' });
-    const classes = useStyles();
-    const dispatch = useDispatch();
-
-    const clear = () => {
-      
-    };
+  const dispatch =  useDispatch();
+  const [postData, setPostData] = useState({ creator: '', title: '', message: '', tags: '', selectedFile: '' });
+  const [addRequestStatus, setAddRequestStatus] = useState('idle')
+  const classes = useStyles();
   
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      dispatch(createPost(postData))
+  
+  const canSave = postData !== { creator: '', title: '', message: '', tags: '', selectedFile: '' } && addRequestStatus === 'idle';
 
+  const clear = () => {
+    
+  };
+  
+  const handleSubmit = async (e) => {
+    
+    
+    if (canSave) {
+      try {
+         e.preventDefault();
+          setAddRequestStatus('pending')
+          dispatch(createPost(postData)).then(() => {
+            dispatch(fetchPosts());
+          });
+          setPostData({ creator: '', title: '', message: '', tags: '', selectedFile: '' })
+
+      } catch (err) {
+          console.error('Failed to save the post', err)
+      } finally {
+          setAddRequestStatus('idle')
+      }
+  }
+      
     };
 
   
@@ -32,7 +52,7 @@ const From = () => {
           <TextField name="message" variant="outlined" label="Message" fullWidth multiline minRows={4} value={postData.message} onChange={(e) => setPostData({ ...postData, message: e.target.value })} />
           <TextField name="tags" variant="outlined" label="Tags (coma separated)" fullWidth value={postData.tags} onChange={(e) => setPostData({ ...postData, tags: e.target.value.split(',') })} />
           <div className={classes.fileInput}><FileBase type="file" multiple={false} onDone={({ base64 }) => setPostData({ ...postData, selectedFile: base64 })} /></div>
-          <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>
+          <Button className={classes.buttonSubmit} disabled={!canSave} variant="contained"  color="primary" size="large" type="submit" fullWidth>Submit</Button>
           <Button variant="contained" color="secondary" size="small" onClick={clear} fullWidth>Clear</Button>
         </form>
       </Paper>
@@ -40,3 +60,6 @@ const From = () => {
 }
 
 export default From;
+
+
+

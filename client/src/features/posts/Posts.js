@@ -1,21 +1,28 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { Grid, CircularProgress } from '@material-ui/core';
-import { useSelector } from "react-redux";
-import {  selectAllPosts, selectIsLoading, selectError } from '../../reducers/posts';
+import { useSelector,useDispatch } from "react-redux";
+import {  selectAllPosts, selectIsLoading, selectError , fetchPosts, getPostsStatus} from '../../features/posts/postsSlice';
 import Post from "./Post/Post";
 
 import useStyles from './styles';
 
 const Posts = () => {
    const classes = useStyles();
-
+  const dispatch = useDispatch();
   const posts = useSelector(selectAllPosts);
   const isLoading = useSelector(selectIsLoading);
   const error = useSelector(selectError);
+  const postStatus = useSelector(getPostsStatus);
+
+  useEffect(() => {
+    if (postStatus === 'idle') {
+        dispatch(fetchPosts())
+    }
+}, [postStatus, dispatch])
 
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <CircularProgress />;
   }
 
   if (error) {
