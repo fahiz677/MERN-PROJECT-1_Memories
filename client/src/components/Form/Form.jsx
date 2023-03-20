@@ -1,16 +1,16 @@
 import React, { useState , useEffect} from 'react';
 import { TextField, Button, Typography, Paper } from '@material-ui/core';
 import FileBase from 'react-file-base64';
-import { useDispatch , useSelector} from "react-redux";
+import {useDispatch , useSelector} from 'react-redux';
 
-import { createPost , fetchPosts  , selectPostById, updatePost} from "../posts/postsSlice";
-
+import { createPost ,updatePost , selectPostById  } from "../../features/posts/postSlice";
 import useStyles from './styles'
 
 
 
 const From = ( {currentId, setCurrentId }) => {
 
+ 
   const dispatch =  useDispatch();
   const [postData, setPostData] = useState({ creator: '', title: '', message: '', tags: '', selectedFile: '' });
   const [addRequestStatus, setAddRequestStatus] = useState('idle')
@@ -23,7 +23,7 @@ const From = ( {currentId, setCurrentId }) => {
      if (post) setPostData(post);
    }, [post]);
   
-  const canSave = postData.creator !== ''&&postData.title !== '' &&postData.massage !== '' && postData.tags !== '' && postData.selectedFile !== ''&& addRequestStatus === 'idle';
+  const canSave = postData.creator !== ''&&postData.title !== '' &&postData.message !== '' && postData.tags !== '' && postData.selectedFile !== ''&& addRequestStatus === 'idle';
 
   const clear = () => {
     setCurrentId(0);
@@ -36,19 +36,16 @@ const From = ( {currentId, setCurrentId }) => {
     if (canSave) {
       try {
          e.preventDefault();
+
          if (currentId) {
           const data = {creator:postData.creator,title:postData.title,message:postData.message,tags:postData.tags,selectedFile:postData.selectedFile,_id:currentId}
-          dispatch(updatePost(data)).then(() => {
-            
-            dispatch(fetchPosts());
-            clear()
-          })
+
+          dispatch(updatePost(data))
+          clear()
         }else{
           setAddRequestStatus('pending')
-          dispatch(createPost(postData)).then(() => {
-            dispatch(fetchPosts());
-            clear()
-          })
+          dispatch(createPost(postData))
+          clear()
         }
 
           
@@ -61,6 +58,8 @@ const From = ( {currentId, setCurrentId }) => {
   }
       
     };
+
+  
 
   
     return (

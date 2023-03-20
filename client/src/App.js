@@ -1,6 +1,6 @@
 import {Container} from "@material-ui/core"
-import Header from '../src/components/Header';
-import Body from "./components/Body";
+import Header from '../src/components/Header/Header.jsx'
+import Dashboard from "./pages/Dashboard";
 
 
 const App =() =>{
@@ -10,7 +10,7 @@ const App =() =>{
     return(
         <Container  maxWidth="lg">
              <Header />
-             <Body />
+             < Dashboard />
         </Container>
     )
 }

@@ -1,6 +1,6 @@
 import React from "react";
-import memories from "../images/memories.png";
-import useStyles from "../styles";
+import memories from "../../images/memories.png";
+import useStyles from "../../styles";
 import { AppBar, Typography } from "@material-ui/core";
 const Header = () => {
   const classes = useStyles();

@@ -1,10 +1,14 @@
-import React, {useState} from "react";
+import React,{useState} from "react";
 import { Container, Grow, Grid } from "@material-ui/core";
-import Posts from "../features/posts/Posts";
-import Form from "../features/Form/Form";
-// import useStyles from '../styles';
-const Body = () => {
+import Posts from '../components/Posts/Posts';
+import Form from "../components/Form/Form";
+
+
+
+const Dashboard = () => {
+
   const [currentId, setCurrentId] = useState(0);
+ 
   return (
     <Grow in>
     <Container>
@@ -21,4 +25,4 @@ const Body = () => {
   );
 };
 
-export default Body;
+export default Dashboard;
