@@ -1,16 +1,17 @@
 import React,{useEffect} from "react";
 import { Grid, CircularProgress } from '@material-ui/core';
 import { useSelector,useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import {fetchPosts, reset} from '../../features/posts/postSlice'
 import Post from './Post/Post'
 import useStyles from './styles'
 
 const Posts = ({setCurrentId}) => {
   const classes = useStyles();
-  
+  const Location  = useLocation();
   const dispatch = useDispatch()
 
-  const { posts, isLoading, isError, message } = useSelector(
+  const { posts , isError, message } = useSelector(
     (state) => state.posts
   )
 
@@ -25,11 +26,11 @@ const Posts = ({setCurrentId}) => {
     return () => {
       dispatch(reset())
     }
-  }, [ isError, message, dispatch])
+  }, [ isError, message, dispatch, Location])
 
-  if (isLoading) {
-    return <CircularProgress /> 
-  }
+  // if (isLoading) {
+  //   return <CircularProgress /> 
+  // }
   return (
     !posts.length ? <CircularProgress /> : (
       <Grid className={classes.container} container alignItems="stretch" spacing={3}>

@@ -79,6 +79,7 @@ export const createPost = createAsyncThunk(
   async (post, thunkAPI) => {
     try {
       
+      // const token = thunkAPI.getState().auth.user.token
       const {data}=await postService.createPost(post)
       return  data;
     } catch (error) {
@@ -99,6 +100,8 @@ export const createPost = createAsyncThunk(
     'posts/fetchPosts',
     async (_, thunkAPI) => {
       try {
+        console.log(thunkAPI.getState());
+        // const token = thunkAPI.getState().auth.user.token
         const { data } =await postService.fetchPosts()
         return  data;
       } catch (error) {
@@ -118,6 +121,7 @@ export const updatePost = createAsyncThunk(
   "posts/updatePost",
   async (post, thunkAPI) => {
     try {
+      // const token = thunkAPI.getState().auth.user.token
       const id = post._id;
       const {data}=await postService.updatePost(id,post)
       return  data;
@@ -138,7 +142,7 @@ export const deletePost = createAsyncThunk(
   'posts/deletePost',
   async (id, thunkAPI) => {
     try {
-      
+      // const token = thunkAPI.getState().auth.user.token
       const { data } = await postService.deletePost(id)
       return  data
     } catch (error) {
@@ -213,12 +217,11 @@ export const likePost = createAsyncThunk(
       })  
       .addCase(updatePost.fulfilled, (state, action) => {
         if (!action.payload?._id) console.log("Update could not complete");
-        const { id } = action.payload;
-        const posts = state.posts.filter((post) => post.id !== id);
+        const { _id } = action.payload;
+        const posts = state.posts.filter((post) => post._id !== _id);
         state.isLoading = false
         state.isSuccess = true
         state.posts = [...posts, action.payload];
-        console.log(state.posts);
       })
       .addCase(updatePost.rejected, (state, action) => {
         state.isLoading = false
@@ -245,10 +248,10 @@ export const likePost = createAsyncThunk(
       })
       .addCase(likePost.fulfilled, (state, action) => {
         if (!action.payload?._id) console.log("likeUpdate could not complete");
-        const { id } = action.payload;
-        const posts = state.posts.filter((post) => post.id !== id);
+        const { _id } = action.payload;
+        const posts = state.posts.filter((post) => post._id !== _id);
         state.isLoading = false
-        state.isSuccess = true
+        state.isSuccess = true;
         state.posts = [...posts, action.payload];
       })
       .addCase(likePost.rejected, (state, action) => {
