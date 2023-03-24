@@ -103,6 +103,7 @@ export const createPost = createAsyncThunk(
         console.log(thunkAPI.getState());
         // const token = thunkAPI.getState().auth.user.token
         const { data } =await postService.fetchPosts()
+        console.log(data);
         return  data;
       } catch (error) {
         const message =
@@ -165,6 +166,7 @@ export const likePost = createAsyncThunk(
     try {
       
       const { data } = await postService.likePost(id)
+      
       return  data
     } catch (error) {
       const message =
@@ -193,6 +195,7 @@ export const likePost = createAsyncThunk(
         state.isLoading = false
         state.isSuccess = true
         state.posts.push(action.payload)
+        state.message = "Post Created successfully"
       })
       .addCase(createPost.rejected, (state, action) => {
         state.isLoading = false
@@ -222,6 +225,7 @@ export const likePost = createAsyncThunk(
         state.isLoading = false
         state.isSuccess = true
         state.posts = [...posts, action.payload];
+        state.message = "Post Updated successfully" 
       })
       .addCase(updatePost.rejected, (state, action) => {
         state.isLoading = false
@@ -237,6 +241,7 @@ export const likePost = createAsyncThunk(
         state.posts = state.posts.filter(
           (post) => post._id !== action.payload.id
         )
+        state.message = "Post Deleted"
       })
       .addCase(deletePost.rejected, (state, action) => {
         state.isLoading = false
@@ -249,10 +254,14 @@ export const likePost = createAsyncThunk(
       .addCase(likePost.fulfilled, (state, action) => {
         if (!action.payload?._id) console.log("likeUpdate could not complete");
         const { _id } = action.payload;
-        const posts = state.posts.filter((post) => post._id !== _id);
+        const posts = state.posts?.map((post) => post._id === _id);
+        const index =  posts?.indexOf(true); 
+        const newValue = state.posts;
+        newValue[index] = action.payload;
         state.isLoading = false
         state.isSuccess = true;
-        state.posts = [...posts, action.payload];
+        state.posts = newValue;
+        
       })
       .addCase(likePost.rejected, (state, action) => {
         state.isLoading = false

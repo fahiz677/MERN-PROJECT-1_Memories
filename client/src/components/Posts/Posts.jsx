@@ -2,6 +2,7 @@ import React,{useEffect} from "react";
 import { Grid, CircularProgress } from '@material-ui/core';
 import { useSelector,useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
+import { toast } from 'react-toastify'
 import {fetchPosts, reset} from '../../features/posts/postSlice'
 import Post from './Post/Post'
 import useStyles from './styles'
@@ -19,7 +20,10 @@ const Posts = ({setCurrentId}) => {
     if (isError) {
       console.log(message)
     }
-
+    
+    if (message) {
+      toast.success(message)
+    }
     
     dispatch(fetchPosts())
 

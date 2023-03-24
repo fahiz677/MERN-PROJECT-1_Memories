@@ -7,7 +7,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import moment from 'moment';
 import { deletePost , likePost } from '../../../features/posts/postSlice';
-import useStyles from './styles'
+import useStyles from './styles';
 
 const Post = ({post , setCurrentId}) => {
    const dispatch = useDispatch();
